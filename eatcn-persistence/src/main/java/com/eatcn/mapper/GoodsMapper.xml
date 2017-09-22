@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eatcn.mapper.GoodsMapper">
+	<resultMap type="Goods" 			id="GoodsResult">
+		<id property="goodId" 			column="goods_id" />
+		<result property="goodsName" 	column="goods_name" />
+		<result property="price" 		column="price" />
+		<result property="imgUrl"		column="img_url" />
+		<result property="info" 		column="info" />
+		<result property="modifyTime" 	column="modify_time" />
+		<result property="saleNumber" 	column="sale_number" />
+		<result property="goodFlag" 	column="good_flag" />
+		<result property="tag" 			column="tag" />
+		<result property="totalStock" 	column="total_stock" />
+		<association property="goodsCategory" column="category_id" resultMap="GoodsCategoryResult" />
+	</resultMap>
+	
+	<resultMap type="GoodsCategory" 	id="GoodsCategoryResult">
+		<id property="id" 				column="category_id" />
+		<result property="category" 	column="category" />
+		<result property="parentId"		column="parent_id" />
+		<result property="tag"			column="tag" />
+	</resultMap>
+	
+	<!-- 通过货物的分类来分页查询货物 -->
+	<select id="listGoodsByPage" parameterType="hashmap" resultMap="GoodsResult">
+		select goods_id,G.category_id,goods_name,price,img_url,info,modify_time,
+		sale_number,good_flag,tag,total_stock from tb_goods G where category_id=#{id}
+		limit #{currentRow},#{pageSize}
+	</select>
+	
+	<!-- parameterType传参的类型   resultMap:返回的结果集  -->
+	<select id="listGoods" resultMap="GoodsResult">
+		select goods_id,G.category_id,goods_name,price,img_url,info,modify_time,
+		sale_number,good_flag,tag,total_stock from tb_goods G
+	</select>
+	
+	<!-- 通过goods的货物id来查询 -->
+	<select id="getGoods" parameterType="int" resultMap="GoodsResult">
+		select goods_id,G.category_id,goods_name,price,img_url,info,modify_time,
+		sale_number,good_flag,G.tag,total_stock,c.category_id,c.category,c.tag,c.parent_id from tb_goods G left outer join 
+		tb_goods_category C on G.category_id=C.category_id
+		where goods_id=#{goodId}
+	</select>
+	
+	<!-- 添加物品-->
+	<insert id="saveGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="goodId">
+		insert into tb_goods(goods_id,category_id,goods_name,
+		price,img_url,info,modify_time,
+		sale_number,good_flag,tag,total_stock)
+		values(#{goodId},#{goodsCategory.id},#{goodsName},#{price},#{imgUrl},#{info},
+		#{modifyTime},#{saleNumber},#{goodFlag},#{tag},#{totalStock})
+	</insert>
+	
+	<!-- 删除货物 -->
+	<delete id="removeGoods" parameterType="int">
+		delete from tb_goods where goods_id=#{goodId}
+	</delete>
+	
+	<!-- 更新货物 -->
+	<update id="updateGoods" parameterType="Goods">
+		update tb_goods set category_id=#{goodsCategory.id},
+		goods_name=#{goodsName},price=#{price},img_url=#{imgUrl},
+		info=#{info},modify_time=#{modifyTime},sale_number=#{saleNumber},
+		good_flag=#{goodFlag},tag=#{tag},total_stock=#{totalStock}
+		 where goods_id=#{goodId}
+	</update>
+	
+	<!-- 更新货物销量和库存 -->
+	<update id="updateGoodsByNumberAndStock" parameterType="Goods">
+		update tb_goods set sale_number=#{saleNumber},total_stock=#{totalStock}
+		where goods_id=#{goodId}
+	</update>
+</mapper>

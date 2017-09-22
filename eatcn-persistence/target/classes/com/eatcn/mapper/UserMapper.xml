@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eatcn.mapper.UserMapper">
+     
+     
+     
+     <sql id="BaseSelects">
+         user_id,username,password,create_time,img_url,phone,sex,role_tag 
+     </sql>
+     <sql id="BaseSelect">
+         username,password,create_time,img_url,phone,sex,role_tag 
+     </sql>
+     
+     
+     <resultMap type="User" id="UserResult">
+     <id property="userid" column="user_id"/>
+     <result property="username" column="username"/>
+     <result property="password" column="password"/>
+     <result property="createTime" column="create_time"/>
+     <result property="imgUrl" column="img_url"/>
+     <result property="phone" column="phone"/>
+     <result property="sex" column="sex"/>
+     <result property="roleTag" column="role_tag"/>
+     </resultMap>
+      
+	<!--添加用户  -->
+	<insert id="insert" parameterType="User" keyProperty="userid" keyColumn="user_id" useGeneratedKeys="true">
+	  insert into tb_user 
+	  (<include refid="BaseSelect"></include> )  
+	  values 
+	  (#{username},
+	  #{password},
+	  #{createTime},
+	  #{imgUrl},
+	  #{phone},
+	  #{sex},
+	  #{roleTag})
+	</insert>
+	<!--根据主键Id查询用户  -->
+	<select id="getUserById" parameterType="Integer" resultMap="UserResult">
+	 select 
+	 <include refid="BaseSelects"></include>
+	 from tb_user 
+	 where user_id=#{userId}
+	
+	</select>
+	
+	<!-- 根据用户名查询用户 -->
+	
+	<select id="getUserByUsername" parameterType="String" resultMap="UserResult">
+	select 
+	<include refid="BaseSelects"></include> 
+	 from tb_user 
+	 where 
+	 username=#{username}
+	</select>
+	
+	<!--查询全部用户  -->
+	
+	<select id="listAllUser"  resultMap="UserResult" parameterType="Integer">
+	select  
+	<include refid="BaseSelects"></include> 
+	 from tb_user 
+	 where 
+	 role_tag=#{userTag}
+	
+	</select>
+	
+	<!--修改用户信息   -->
+	
+	<update id="update" parameterType="User">
+	update tb_user 
+	set 
+	username=#{username},
+	password=#{password},
+	create_time=#{createTime},
+	img_url=#{imgUrl},
+	phone=#{phone},
+	sex=#{sex},
+	role_tag=#{roleTag} 
+	where user_id=#{userid}
+	</update>
+	
+	
+	<!--动态修改用户信息  -->
+	
+	<update id="updateUser" parameterType="User">
+	  update tb_user
+	  <set>
+	      <if test="username!=null">
+	      username=#{username},
+	      </if>
+	      <if test="password!=null ">
+	      password=#{password},
+	      </if>
+	      <if test="createTime!=null ">
+	      create_time=#{createTime},
+	      </if>
+	      <if test="imgUrl!=null">
+	      img_url=#{imgUrl},
+	      </if>
+	      <if test="phone!=null ">
+	      phone=#{phone},	      
+	      </if>
+	      <if test="sex!=null">
+	      sex=#{sex},
+	      </if>
+	      <if test="roleTag!=null ">
+	      role_tag=#{roleTag},
+	      </if>
+	     
+	  </set>
+	   where user_id=#{userid}
+	</update>
+	
+	
+	
+	<update id="updateUserRole" parameterType="map" >
+	  update tb_user
+	  set
+	  role_tag=#{roleTag}
+	  where user_id=#{userid}
+	
+	</update>
+	
+	<delete id="deleteByUserId" parameterType="Integer">
+	  delete from tb_user where user_id=#{userId}
+	</delete>
+
+</mapper>

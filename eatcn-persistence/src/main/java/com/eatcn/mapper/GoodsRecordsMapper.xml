@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eatcn.mapper.GoodsRecordsMapper">
+
+	<resultMap type="goods" id="GoodsResult">
+	<id property="goodsId" column="goods_id"/>
+	<result property="goodsName" column="goods_name"/>
+	
+	</resultMap>
+	<resultMap type="store" id="StoreResult">
+	<id property="id" column="store_id"/>
+	<result property="name" column="store_name"/>
+	
+	</resultMap>
+	<resultMap type="goodsRecords" id="GoodsRecordsResult">
+	<id property="id" column="records_id"/>
+	<result property="appTime" column="app_time"/>
+	<result property="deliverTime" column="deliver_time"/>
+	<result property="status" column="status"/>
+	<result property="appCount" column="app_count"/>
+	<result property="deliverCount" column="deliver_count"/>
+	<result property="remarks" column="remarks"/>
+	<association property="goods" resultMap="GoodsResult" />
+	<association property="store" resultMap="StoreResult" />
+	</resultMap>
+
+
+	<select id="listRecords" resultMap="GoodsRecordsResult">
+	select r.records_id,g.goods_name,s.store_name,r.app_time,r.deliver_time,r.status,r.app_count,r.deliver_count,r.remarks
+	from tb_goods_records as r left outer join tb_goods as g on r.goods_id=g.goods_id
+	left outer join tb_store as s on r.store_id=s.store_id
+	</select>
+	
+	<select id="getRecord" parameterType="int" resultMap="GoodsRecordsResult">
+	select r.records_id,g.goods_name,s.store_name,r.app_time,r.deliver_time,r.status,r.app_count,r.deliver_count,r.remarks
+	from tb_goods_records as r left outer join tb_goods as g on r.goods_id=g.goods_id
+	left outer join tb_store as s on r.store_id=s.store_id where r.records_id=#{id}
+	</select>
+	<select id="getRecordByStore" parameterType="int" resultMap="GoodsRecordsResult">
+	select r.records_id,g.goods_name,s.store_name,r.app_time,r.deliver_time,r.status,r.app_count,r.deliver_count,r.remarks
+	from tb_goods_records as r left outer join tb_goods as g on r.goods_id=g.goods_id
+	left outer join tb_store as s on r.store_id=s.store_id where r.store_id=#{id}
+	</select>
+	<insert id="saveRecords" parameterType="GoodsRecords" useGeneratedKeys="true" keyProperty="id">
+	insert into tb_goods_records(goods_id,store_id,app_time,deliver_time,status,app_count,deliver_count,remarks)
+	values(#{goods.goodId},#{store.id},#{appTime},#{deliverTime},#{status},#{appCount},#{deliverCount},#{remarks})
+	</insert>
+	
+	<update id="updateReords" parameterType="java.util.Map" >
+	update tb_goods_records set deliver_time=#{deliverTime},deliver_count=#{deliverCount}
+	where records_id=#{id}
+	</update>
+	
+	<update id="updateReordsStatus" parameterType="java.util.Map" >
+	update tb_goods_records set status=#{status}
+	where records_id=#{id}
+	</update>
+	
+	
+</mapper>

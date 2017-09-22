@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eatcn.mapper.OrderMapper">
+
+<resultMap type="user" id="userResult">
+	<id property="userid" column="user_id" />
+	<result property="username" column="username" />
+	<result property="password" column="password" />
+	<result property="createTime" column="create_time" />
+	<result property="imgUrl" column="img_url" />
+	<result property="phone" column="phone" />
+	<result property="sex" column="sex" />
+	<result property="roleTag" column="role_tag" />
+</resultMap>
+
+<resultMap type="store" id="storeResult">
+	<id property="id" column="store_id"/>
+	<result property="name" column="store_name"/>
+	<result property="opentime" column="open_time"/>
+	<result property="closetime" column="close_time"/>
+	<result property="locationX" column="location_x"/>
+	<result property="locationY" column="location_y"/>
+	<result property="status" column="status"/>
+	<result property="closeReason" column="close_reason"/>
+	<result property="address" column="address"/>
+	<result property="roleTag" column="role_tag"/>
+</resultMap>
+
+<resultMap type="receiver" id="receiverResult">
+	<id property="receiverId" column="receiver_id"/>
+	<result property="name" column="name"/>
+	<result property="address" column="address"/>
+	<result property="phone" column="phone"/>
+	<result property="isReceived" column="is_received"/>
+</resultMap>
+
+<resultMap type="order" id="orderResult">
+	<id property="orderId" column="order_id" />
+	<result property="orderTime" column="order_time"/>
+	<result property="total" column="total"/>
+	<result property="status" column="status"/>
+	<association property="store" resultMap="storeResult" />
+	<association property="user" resultMap="userResult" />
+	<association property="receiver" resultMap="receiverResult" />
+</resultMap>
+
+<select id="listOrdersByUser" resultMap="orderResult">
+	select * 
+	from tb_order t1 
+	left join tb_store t2 on t1.store_id=t2.store_id 
+	left join tb_user t3 on t1.user_id=t3.user_id 
+	left join tb_receiver t4 on t1.receiver_id=t4.receiver_id 
+	where t1.user_id=#{user.userid} limit #{start},#{size};
+</select>
+
+<select id="listOrdersByStore" resultMap="orderResult">
+	select * 
+	from tb_order t1 
+	left join tb_store t2 on t1.store_id=t2.store_id 
+	left join tb_user t3 on t1.user_id=t3.user_id 
+	left join tb_receiver t4 on t1.receiver_id=t4.receiver_id 
+	where t1.store_id=#{store.id} limit #{start},#{size};
+</select>
+
+<select id="getOrder" parameterType="int" resultMap="orderResult">
+	select * 
+	from tb_order t1 
+	left join tb_store t2 on t1.store_id=t2.store_id 
+	left join tb_user t3 on t1.user_id=t3.user_id 
+	left join tb_receiver t4 on t1.receiver_id=t4.receiver_id 
+	where t1.order_id=#{id};
+</select>
+
+<insert id="saveOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="orderId">
+	insert into tb_order (store_id,user_id,receiver_id,order_time,total,status) 
+	values(#{store.id},#{user.userid},#{receiver.receiverId},#{orderTime},#{total},#{status});
+</insert>
+
+<select id="getOrderNumByUser" parameterType="User" resultType="int">
+	select count(order_id) from tb_order where user_id=#{userid};
+</select>
+
+<select id="getOrderNumByStore" parameterType="Store" resultType="int">
+	select count(order_id) from tb_order where store_id=#{id};
+</select>
+
+<update id="updateOrderStatus">
+	update tb_order set status=#{status} 
+	where order_id=#{id};
+</update>
+
+</mapper>

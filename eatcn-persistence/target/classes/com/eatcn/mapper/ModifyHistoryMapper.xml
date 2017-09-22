@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eatcn.mapper.ModifyHistoryMapper">
+       
+       <resultMap type="ModifyHistory" id="ModifyHistoryResult">
+       <id property="historyId" column="history_id"/>
+       <result property="info" column="info"/>
+       <result property="modifyTime" column="modify_time"/>
+       <association property="user" javaType="User" >
+       <id property="userid" column="uid"/>
+       <result property="username" column="username"/>
+       <result property="phone" column="phone"/>
+       <result property="sex" column="sex"/>  
+       </association>
+       <association property="goods" javaType="Goods">
+       <id property="goodId" column="gid"/>
+       <result property="goodsName" column="gname"/>  
+       <result property="price" column="price"/>  
+       <result property="info" column="info"/>  
+       <result property="modifyTime" column="modify_time"/>  
+       <result property="imgUrl" column="img_url"/>  
+       <result property="saleNumber" column="sale_number"/>  
+       <result property="goodFlag" column="good_flag"/>  
+       <result property="tag" column="tag"/>  
+       <result property="totalStock" column="total_stock"/>   
+       </association>
+       </resultMap>
+     
+     <!--添加历史记录  -->
+    <insert id="insert"  parameterType="ModifyHistory" useGeneratedKeys="true" keyProperty="historyId" 
+    keyColumn="history_id">
+    insert into tb_modify_history 
+    (goods_id, user_id,info,modify_time)
+    values
+    (#{user.userid},#{goods.goodId}, #{info},#{modifyTime})
+    </insert>
+	
+	<!--查询全部历史记录 -->
+	<select id="listAll" resultMap="ModifyHistoryResult">
+	  select t1.*,
+	  t2.user_id uid,
+	  t2.username,
+	  t2.phone,
+	  t2.sex,
+	  t3.goods_id gid,
+	  t3.goods_name gname,
+	  t3.price,
+	  t3.img_url,
+	  t3.info,
+	  t3.modify_time,
+	  t3.sale_number,
+	  t3.good_flag,
+	  t3.tag,
+	  t3.total_stock
+	  from tb_modify_history t1 
+	  left join tb_user t2 
+	  on t1.user_id=t2.user_id 
+	  left join tb_goods t3
+	  on t1.goods_id=t3.goods_id	  
+	</select>
+	<!--根据用户id查询历史记录 -->
+	<select id="listAllByUserId" parameterType="Integer" resultMap="ModifyHistoryResult">
+	  select t1.*,
+	  t2.user_id uid,
+	  t2.username,
+	  t2.phone,
+	  t2.sex,
+	  t3.goods_id gid,
+	  t3.goods_name gname,
+	  t3.price,
+	  t3.img_url,
+	  t3.info,
+	  t3.modify_time,
+	  t3.sale_number,
+	  t3.good_flag,
+	  t3.tag,
+	  t3.total_stock
+	  from tb_modify_history t1 
+	  left join tb_user t2 
+	  on t1.user_id=t2.user_id 
+	  left join tb_goods t3
+	  on t1.goods_id=t3.goods_id	  
+	  where t2.user_id=#{userId}
+	</select>
+	<!--根据商品id查询历史记录 -->
+	<select id="listAllByGoodsId" parameterType="Integer" resultMap="ModifyHistoryResult">
+	  select t1.*,
+	  t2.user_id uid,
+	  t2.username,
+	  t2.phone,
+	  t2.sex,
+	  t3.goods_id gid,
+	  t3.goods_name gname,
+	  t3.price,
+	  t3.img_url,
+	  t3.info,
+	  t3.modify_time,
+	  t3.sale_number,
+	  t3.good_flag,
+	  t3.tag,
+	  t3.total_stock
+	  from tb_modify_history t1 
+	  left join tb_user t2 
+	  on t1.user_id=t2.user_id 
+	  left join tb_goods t3
+	  on t1.goods_id=t3.goods_id	  
+	  where t3.goods_id=#{goodsId}
+	</select>
+	
+	<!-- 动态查询 -->
+	<select id="listAllHistory" resultMap="ModifyHistoryResult"
+	 parameterType="map">
+	select 
+	history_id,
+	goods_id,
+	user_id,
+	info,
+	modify_time
+	 from tb_modify_history
+	<where>
+	 <if test="historyId!=null">
+	 history_id=#{historyId}
+	 </if>
+	 <if test="info!=null">
+	   and info like  CONCAT(CONCAT('%',#{info}),'%')
+	 </if>
+	 <if test="modifyTime!=null">
+	  and modify_time={modifyTime}
+	 </if>
+	 <if test="userid!=null">
+	 and user_id=#{userid}
+	 </if>
+	 <if test="goodId!=null">
+	 and goods_id=#{goodId}
+	 </if>
+	</where>
+	</select>
+	
+	<!--分页查询  -->
+
+	<select id="listByPage" resultMap="ModifyHistoryResult"
+	 parameterType="map">
+	select 
+	history_id,
+	goods_id,
+	user_id,
+	info,
+	modify_time
+	 from tb_modify_history
+	<where>
+	 <if test="historyId!=null">
+	 history_id=#{historyId}
+	 </if>
+	 <if test="info!=null">
+	  and info like  CONCAT(CONCAT('%',#{info}),'%')
+	 </if>
+	 <if test="modifyTime!=null">
+	  and modify_time={modifyTime}
+	 </if>
+	 <if test="userid!=null">
+	 and user_id=#{userid}
+	 </if>
+	 <if test="goodId!=null">
+	 and goods_id=#{goodId}
+	 </if>
+	</where>
+	limit #{start},#{size}
+	</select>
+	<!--统计总的记录  -->
+	<select id="listCount" resultType="Integer" 
+	parameterType="map">
+	select count(1) 
+	from tb_modify_history
+	<where>
+    <if test="userid!=null">
+	 user_id=#{userid}
+	 </if>
+	 <if test="goodId!=null">
+	 and goods_id=#{goodId}
+	 </if>
+	</where>
+	
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</mapper>

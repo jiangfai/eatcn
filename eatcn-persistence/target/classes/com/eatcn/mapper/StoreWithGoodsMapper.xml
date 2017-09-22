@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eatcn.mapper.StoreWithGoodsMapper">
+
+	<resultMap type="Store" id="StoreResult">
+	<id property="id" column="store_id"/>
+	<result property="name" column="store_name"/>
+	<result property="address" column="address"/>
+	
+	</resultMap>
+	
+	<resultMap type="Goods" 	id="GoodsResult">
+		<id property="goodId" 			column="goods_id" />
+		<result property="goodsName" 	column="goods_name" />
+		<result property="price" 		column="price" />
+		<result property="imgUrl"		column="img_url" />
+		<result property="info" 		column="info" />
+		<result property="modifyTime" 	column="modify_time" />
+		<result property="saleNumber" 	column="sale_number" />
+		<result property="goodFlag" 	column="good_flag" />
+		<result property="tag" 			column="tag" />
+		<result property="totalStock" 	column="total_stock" />
+	</resultMap>
+
+	<resultMap type="StoreWithGoods" id="StoreWithGoodsResult">
+	<id property="id" column="id"/>
+	<result property="storeStock" column="store_stock"/>
+	<result property="isOnsale" column="is_onsale"/>
+	<association property="store" resultMap="StoreResult" />
+	<association property="goods" resultMap="GoodsResult" />
+	</resultMap>
+
+
+	<select id="listStoreWithGoods"  resultMap="StoreWithGoodsResult">
+	select id,st.store_name,st.address,g.goods_name,g.price,store_stock,is_onsale
+	from tb_store_goods s left outer join tb_store st on s.store_id=st.store_id
+	left outer join tb_goods g on s.goods_id=g.goods_id 
+	
+	</select>
+	
+	<select id="getStoreWithGoodsByStoreAndPage" parameterType="HashMap" resultMap="StoreWithGoodsResult">
+	select id,st.store_id,st.store_name,st.address,g.goods_name,g.price,store_stock,is_onsale
+	from tb_store_goods s left outer join tb_store st on s.store_id=st.store_id
+	left outer join tb_goods g on s.goods_id=g.goods_id where s.store_id=#{id} limit #{currentRow},#{pageSize}
+	</select>
+	
+	<select id="getStoreWithGoodsByGoods" parameterType="int" resultMap="StoreWithGoodsResult">
+	select id,st.store_id,st.store_name,st.address,g.goods_name,g.price,store_stock,is_onsale
+	from tb_store_goods s left outer join tb_store st on s.store_id=st.store_id
+	left outer join tb_goods g on s.goods_id=g.goods_id where s.goods_id=#{id} 
+	</select>
+	
+	<select id="getStoreWithGoodsByGoodsAndStore" parameterType="java.util.Map" resultMap="StoreWithGoodsResult">
+	select id,st.store_id,st.store_name,st.address,g.goods_name,g.price,store_stock,is_onsale
+	from tb_store_goods s left outer join tb_store st on s.store_id=st.store_id
+	left outer join tb_goods g on s.goods_id=g.goods_id where s.goods_id=#{goodId} and s.store_id=#{storeId}
+	</select>
+	
+	<insert id="saveStoreWithGoods"  parameterType="StoreWithGoods" useGeneratedKeys="true" keyProperty="id">
+	insert into tb_store_goods(store_id,goods_id,store_stock,is_onsale)
+	values(#{store.id},#{goods.goodId},#{storeStock},#{isOnsale})
+	</insert>
+	
+	<update id="updateStoreWithGoodsStoreStock" parameterType="java.util.Map" >
+	update tb_store_goods set store_stock=#{storeStock} where goods_id=#{goodId} and store_id=#{storeId}
+	</update>
+	
+	<update id="updateStoreWithGoodsIsOnsale" parameterType="java.util.Map" >
+	update tb_store_goods set is_onsale=#{isOnsale} where id=#{id}
+	</update>
+</mapper>

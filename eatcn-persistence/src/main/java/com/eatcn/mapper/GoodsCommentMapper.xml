@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<!-- 货物的评论 -->
+	<mapper namespace="com.eatcn.mapper.GoodsCommentMapper">
+		<resultMap type="GoodsComment" 		id="GoodsCommentResult">
+			<id property="id" 				column="comment_id" />
+			<result property="createTime" 	column="create_date" />
+			<result property="comment" 		column="comment" />
+			<association property="user" column="user_id" resultMap="UserResult" />
+			<association property="goods" column="goods_id" resultMap="GoodsResult" />
+		</resultMap>
+		<!-- 货物 -->
+		<resultMap type="Goods" 			id="GoodsResult">
+			<id property="goodId" 			column="goods_id" />
+			<result property="goodsName" 	column="goods_name" />
+			<result property="price" 		column="price" />
+			<result property="imgUrl"		column="img_url" />
+			<result property="info" 		column="info" />
+			<result property="modifyTime" 	column="modify_time" />
+			<result property="saleNumber" 	column="sale_number" />
+			<result property="goodFlag" 	column="good_flag" />
+			<result property="tag" 			column="tag" />
+			<result property="totalStock" 	column="total_stock" />
+			<association property="goodsCategory" column="category_id" resultMap="GoodsCategoryResult" />
+		</resultMap>
+		<!-- 货物分类 -->
+		<resultMap type="GoodsCategory" 	id="GoodsCategoryResult">
+			<id property="id" 				column="category_id" />
+			<result property="category" 	column="category" />
+			<result property="parentId"		column="parent_id" />
+			<result property="tag"			column="tag" />
+		</resultMap>
+		<!--用户表-->
+		<resultMap type="User" id="UserResult">
+		     <id property="userid" column="user_id"/>
+		     <result property="username" column="username"/>
+		     <result property="password" column="password"/>
+		     <result property="createTime" column="create_time"/>
+		     <result property="imgUrl" column="img_url"/>
+		     <result property="phone" column="phone"/>
+		     <result property="sex" column="sex"/>
+		     <result property="roleTag" column="role_tag"/>
+	     </resultMap>
+	     
+	      <!-- 分页查询评论 ,根据货物id查询-->
+		<select id="listGoodsCommentByPageBeanAndGooodsId" parameterType="HashMap" resultMap="GoodsCommentResult">
+			select comment_id,create_date,comment,C.user_id,C.goods_id,G.goods_name,U.username 
+			from tb_goods_comment C left outer join
+			tb_goods G on C.goods_id = G.goods_id  left outer join tb_user U 
+			on C.user_id = U.user_id 
+			where c.goods_id = #{id} limit #{currentRow},#{pageSize}
+		</select>
+	     <select id="countGoodsComment" resultType="int">
+	     select count(comment_id) from tb_goods_comment
+	     
+	     </select>
+	       <!-- 分页查询评论 ,根据用户id查询-->
+		<select id="listGoodsCommentByPageBeanAndUserId" parameterType="HashMap" resultMap="GoodsCommentResult">
+			select comment_id,create_date,comment,C.user_id,C.goods_id,G.goods_name,U.username  from tb_goods_comment C 
+			left outer join tb_user U on C.user_id = U.user_id 
+			left outer join tb_goods G on C.goods_id = G.goods_id 
+			where C.user_id = #{id} limit #{currentRow},#{pageSize}
+		</select>
+	     
+	     <!-- parameterType传参的类型   resultMap:返回的结果集  -->
+		<select id="listGoodsComment" resultMap="GoodsCommentResult">
+			select *
+			from tb_goods_comment C left outer join
+			tb_goods G on C.goods_id = G.goods_id  left outer join tb_user U 
+			on C.user_id = U.user_id 
+		</select>
+		
+		<select id="listGoodsCommentByPage" parameterType="HashMap" resultMap="GoodsCommentResult">
+			select *
+			from tb_goods_comment C left outer join
+			tb_goods G on C.goods_id = G.goods_id  left outer join tb_user U 
+			on C.user_id = U.user_id limit #{currentRow},#{pageSize}
+		</select>
+		
+		<!-- 通过id来查询 -->
+		<select id="getGoodsComment" parameterType="int" resultMap="GoodsCommentResult">
+			select comment_id,create_date,comment,user_id,goods_id from tb_goods_comment 
+			where comment_id=#{id}
+		</select>
+		
+		<!-- 添加评论-->
+	<insert id="saveGoodsComment" parameterType="GoodsComment" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_goods_comment(comment_id,user_id,
+		goods_id,create_date,comment)
+		 values (#{id},#{user.userid},#{goods.goodId},#{createTime},#{comment})
+	</insert>
+	
+	<!-- 删除评论 -->
+	<delete id="removeGoodsComment" parameterType="int">
+		select * 
+			from tb_goods_comment C left outer join
+			tb_goods G on C.goods_id = G.goods_id  left outer join tb_user U 
+			on C.user_id = U.user_id 
+	</delete>
+	
+	<!-- 更新评论 -->
+	<update id="updateGoodsComment" parameterType="GoodsComment">
+		update tb_goods_comment set 
+		user_id=#{user.userid},goods_id=#{goods.goodId},create_date=#{createTime},
+		comment=#{comment} where comment_id=#{id}
+	</update>
+	</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eatcn.mapper.StoreMapper">
+
+<resultMap type="district" id="districtResult">
+	<id property="id" column="district_id" />
+	<result property="name" column="district_name"/>
+</resultMap>
+
+<resultMap type="user" id="userResult">
+	<id property="userid" column="user_id" />
+	<result property="username" column="username" />
+	<result property="password" column="password" />
+	<result property="createTime" column="create_time" />
+	<result property="imgUrl" column="img_url" />
+	<result property="phone" column="phone" />
+	<result property="sex" column="sex" />
+	<result property="roleTag" column="role_tag" />
+</resultMap>
+
+<resultMap type="store" id="storeResult">
+	<id property="id" column="store_id"/>
+	<result property="name" column="store_name"/>
+	<result property="opentime" column="open_time"/>
+	<result property="closetime" column="close_time"/>
+	<result property="locationX" column="location_x"/>
+	<result property="locationY" column="location_y"/>
+	<result property="status" column="status"/>
+	<result property="closeReason" column="close_reason"/>
+	<result property="address" column="address"/>
+	<result property="roleTag" column="role_tag"/>
+	<association property="district" resultMap="districtResult" />
+	<association property="user" resultMap="userResult" />
+</resultMap>
+
+<select id="getStore" parameterType="int" resultMap="storeResult">
+	select *  
+		from tb_store t1
+		left join tb_user t2 on t1.user_id=t2.user_id 
+		left join tb_district t3 on t1.district_id=t3.district_id 
+		where t1.store_id=#{id};
+</select>
+
+<select id="listStoresByDistrict" resultMap="storeResult">
+	select *  
+		from tb_store t1
+		left join tb_user t2 on t1.user_id=t2.user_id 
+		left join tb_district t3 on t1.district_id=t3.district_id 
+		where t1.district_id=#{district.id} limit #{start},#{size};
+</select>
+
+<select id="getStoreNumByDistrict" parameterType="District" resultType="int">
+	select count(store_id) from tb_store where district_id=#{id};
+</select>
+
+</mapper>
