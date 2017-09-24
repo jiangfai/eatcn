@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>吃天朝首页</title>
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" type="text/css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script type="text/javascript"
+	src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script type="text/javascript"
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+<!--<link rel="stylesheet" type="text/css" href="../css/动画.css"/>-->
+</head>
+<body>
+	<div class="left1">
+		
+
+		<!--<div class="mv">
+				<h2>好吃哦!</h2>
+			</div>-->
+	</div>
+	<div class="right1">
+		<!--<h1>这个是广告哦</h1>-->
+		<a> <img src="img/hotR.jpg" /> <font id="rmb"><h4>¥76.00</h4></font>
+			<font id="info"><h6>草原达尔沁 内蒙古特产 超干 风干牛肉干 200g 零食 纸袋</h6></font>
+		</a> <a> <img src="img/鸭舌头.jpg" /> <font id="rmb"><h4>¥128.00</h4></font>
+			<font id="info"><h6>【萨啦咪salami 鸭舌头称重500g】肉类熟食温州特产美</h6></font>
+		</a>
+	</div>
+	<div class="heading">
+		<a href=""><img src="img/图片2.png" width="140px" height="50px" /></a>
+		<span id="login" th:if="${session.user.username}!=null"
+			th:text="${session.user.username}">
+			<a href="#" th:href="@{/toupdate}">修改资料</a>
+		</span> 
+			<span id="login"
+			th:if="${session.user.username}==null"> <a href="#"
+			th:href="@{/to_login}">用户登录</a>&nbsp;&nbsp;&nbsp;没账号?请注册<a href="#"
+			th:href="@{/to_register}">快速注册</a>
+		</span>
+	</div>
+	<div class="fei">
+		<h6 class="font">销售特产最多的网络平台</h6>
+	</div>
+	<div class="line"></div>
+	<form action="#" method="post" class="body1">
+		<div class="col-lg-3">
+			<div class="input-group">
+				<input type="text" class="form-control">
+				<div class="input-group-btn">
+					<button type="button"
+						class="btn btn-default 
+                        dropdown-toggle"
+						data-toggle="dropdown">
+						选择区域 <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu pull-right">
+						<li><a href="#">武侯区</a></li>
+						<li><a href="#">金牛区</a></li>
+						<li><a href="#">青羊区</a></li>
+						<li class="divider"></li>
+						<li><a href="#">分离的链接</a></li>
+					</ul>
+				</div>
+				<!-- /btn-group -->
+
+			</div>
+			<!-- /input-group -->
+		</div>
+		<!-- /.col-lg-3 -->
+		<div class="btn-group">
+			<button type="button" class="btn btn-default dropdown-toggle"
+				data-toggle="dropdown" id="fat2-btn">
+				区域店铺 <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="#">科华一号店</a></li>
+				<li><a href="#">科华二号店</a></li>
+				<li><a href="#">科华三号店</a></li>
+				<li><a href="#">科华四号店</a></li>
+			</ul>
+		</div>
+		<div class="btn-group">
+			
+		</div>
+
+		</div>
+		<!-- /.row -->
+	</form>
+	<div class="line2"></div>
+
+	<!--改模块是放热销的商品0000000000000000000000000000000000000000-->
+	<div class="goodsHot">
+		<span id="span"> <font id="font"><h4>热销特产</h4></font>
+		</span>
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr id="trLine">
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/hotR.jpg" /> <font id="rmb"><h4>¥76.00</h4></font>
+							<font id="info"><h6>草原达尔沁 内蒙古特产 超干 风干牛肉干 200g 零食 纸袋</h6></font> </a>
+					</div>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/大枣.jpg" /> <font id="rmb"><h4>¥76.00</h4></font>
+							<font id="info"><h6>【沃疆】新疆特产和田大枣红枣3000g骏枣礼盒装</h6></font> </a>
+					</div>
+				</td>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/烤鸭.jpg" /> <font id="rmb"><h4>¥69.80</h4></font>
+							<font id="info"><h6>煌上煌 酱鸭450克礼盒装 江西特产 微辣味 酱鸭</h6></font> </a>
+					</div>
+				</td>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/鸭舌头.jpg" /> <font id="rmb"><h4>¥128.00</h4></font>
+							<font id="info"><h6>【萨啦咪salami 鸭舌头称重500g】肉类熟食温州特产美</h6></font> </a>
+					</div>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/腊肠.jpg" /> <font id="rmb"><h4>¥99.00</h4></font>
+							<font id="info"><h6>皇上皇 广东特产腊肠礼盒 俩好腊味礼盒800g</h6></font> </a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="line2"></div>
+	<div class="goodsHot">
+		<span id="span"> <font id="font"><h4>推荐特产</h4></font>
+		</span>
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr id="trLine">
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/土家腊肉.jpg" /> <font id="rmb"><h4>¥59.80</h4></font>
+							<font id="info"><h6>寻肴 湖南腊肉250g*2袋 湖南特产烟熏咸腊肉腊肠</h6></font> </a>
+					</div>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/猪肉铺.jpg" /> <font id="rmb"><h4>¥16.00</h4></font>
+							<font id="info"><h6>【良品铺子】靖江猪肉脯200g 原味 特产零食小吃猪肉</h6></font> </a>
+					</div>
+				</td>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/红枣.jpg" /> <font id="rmb"><h4>¥59.20</h4></font>
+							<font id="info"><h6>【买一斤送一斤】三晋御品 新疆特产红枣夹核桃仁加葡萄干</h6></font> </a>
+					</div>
+				</td>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/肉干.jpg" /> <font id="rmb"><h4>¥95.00</h4></font>
+							<font id="info"><h6>1号牧场 肉干肉脯 内蒙特产手撕风干牛肉干休闲零食独立包</h6></font> </a>
+					</div>
+				</td>
+				<td style="width: 200px;">
+					<div class="hot">
+						<a><img src="img/鸡爪.jpg" /> <font id="rmb"><h4>¥49.00</h4></font>
+							<font id="info"><h6>小胡鸭 休闲麻辣小吃肉类零食大礼包 香辣鸭脖鸭翅鸭爪鸭锁</h6></font> </a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="line2"></div>
+	<div id="footer" class="wrap">
+		<dl>
+			<dt>
+				<font>聚集全中国最美味的特产&copy; 2017 吃货科技 川ICP证1000001号</font>
+			</dt>
+			<dd>
+				<font>关于我们 · 联系方式 · 意见反馈 · 帮助中心</font>
+			</dd>
+		</dl>
+	</div>
+</body>
+</html>

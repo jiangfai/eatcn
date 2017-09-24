@@ -1,0 +1,30 @@
+.container{
+	padding-left: 280px;
+	padding-top: 30px;
+}
+.form-horizontal .form-control{
+    background:#eeffbb;
+    border: none;
+    border-radius: 20px;
+    box-shadow: none;
+    padding: 0 20px 0 45px;
+    height: 40px;
+    transition: all 0.3s ease 0s;
+}
+.form-horizontal .form-group{
+    padding: 0 20px;
+    margin: 0 0 10px 0;
+    position: relative;
+}
+.radio{
+	padding-left: 250px;
+}
+.form-bg{
+	padding-left: 50px;
+}
+/*.row{
+	background-color: black;
+	padding-left: 200px;
+}*/
+
+

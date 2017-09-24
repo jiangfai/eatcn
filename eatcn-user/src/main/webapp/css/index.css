@@ -1,0 +1,119 @@
+body{
+	margin: 0px;
+	padding: 0px;
+}
+.left1{
+	width: 130px;
+	height: 400px;
+	float: left;
+	position: fixed;
+	top: 85px;
+	left: 10px;
+	background-color: #ffc8b4;
+}
+.right1{
+	width: 130px;
+	height: 400px;
+	position: fixed;
+	top: 85px;
+	right: 10px;
+	
+}
+.heading{
+	height: 50px;
+	margin-left: 150px;
+	margin-top: 10px;
+}
+.font{
+	color: #808080;
+	margin-left: 150px;
+	margin-top: 0px;
+}
+
+.heading #login{
+	float: right;
+	margin-right:230px;
+	margin-top: 30px;
+}
+.line{
+	background-color: #11A3FC;
+	margin-left: 150px;
+	height: 2px;
+	width: 1050px;
+	margin-top: 0px;
+}
+.line2{
+	background-color: #77ffee;
+	margin-left: 150px;
+	height: 1px;
+	width: 1050px;
+	margin-top: 10px;
+}
+.goodsHot{
+	background-color: #FFffbb;
+	margin-left: 150px;
+	width: 1050px;
+	margin-top: 10px;
+}
+.goodsHot #font{
+	color: #ff0000;
+}
+.goodsHot #rmb{
+	color: #FF0000;
+	size: a3;
+}
+.goodsHot #info{
+	size: a5;
+	color: #555555;
+}
+.hot{
+    padding: 30px;
+    width: 200px;
+	margin: 0 auto;
+}
+img{
+	 width: 180px;
+	 height:180ox;
+	margin: 0 auto;
+}
+.goodsHot #trLine{
+	margin: 0 auto;
+}
+
+/*a:link {color:#0000FF;}      /* 未访问链接*/*/
+a:visited {color:#ea0000;}  /* 已访问链接 */
+a:hover {color:#00bb00;}  /* 鼠标移动到链接上 */
+a:active {color:#11A3FC;}  /* 鼠标点击时 */
+.form-control{
+
+}
+.col-lg-3{
+	margin-left: 150px;
+	margin-top: 10px;
+}
+
+.btn-group{
+	margin-top: 10px;
+}
+/*#body2{
+	height: 100px;
+}*/
+.wrap{
+	margin-left: 150px;
+}
+.wrap dl{
+	line-height:30px; 
+	font-size:14px; 
+	font-weight:bold; 
+	/*border-bottom:3px solid #09C; */
+}
+.wrap dl dt{
+	width: 450px;
+	padding-left:10px; 
+	padding-right:30px;
+	float: left;
+}
+.wrap dl dd{
+	float: right;
+	margin-right: 200px;
+}
